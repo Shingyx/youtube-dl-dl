@@ -4,11 +4,12 @@ import { promisify } from 'util';
 
 import { downloadFile, downloadJson } from './utilities';
 
+// TODO directory as an arg
 export async function downloadYouTubeDl(): Promise<void> {
   const youTubeDlFilename = 'youtube-dl.exe';
 
   const releaseJsonPromise = downloadJson(
-    'https://api.github.com/repos/rg3/youtube-dl/releases/latest',
+    'https://api.github.com/repos/ytdl-org/youtube-dl/releases/latest',
   );
 
   if (fs.existsSync(youTubeDlFilename)) {
