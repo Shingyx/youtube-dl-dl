@@ -1,26 +1,35 @@
 import { execFile } from 'child_process';
 import fs from 'fs';
+import path from 'path';
 import { promisify } from 'util';
 
 import { downloadFile, downloadJson } from './utilities';
 
-// TODO directory as an arg
-export async function downloadYouTubeDl(): Promise<void> {
+export interface ILogger {
+  info(message: string): void;
+  error(message: string): void;
+}
+
+export async function downloadYouTubeDl(
+  directory: string = '.',
+  logger: ILogger = console,
+): Promise<void> {
   const youTubeDlFilename = 'youtube-dl.exe';
+  const youTubeDlPath = path.join(directory, 'youtube-dl.exe');
 
   const releaseJsonPromise = downloadJson(
     'https://api.github.com/repos/ytdl-org/youtube-dl/releases/latest',
   );
 
-  if (fs.existsSync(youTubeDlFilename)) {
-    const installedVersion = getInstalledVersion(youTubeDlFilename);
+  if (fs.existsSync(youTubeDlPath)) {
+    const installedVersion = getInstalledVersion(youTubeDlPath, logger);
     if (installedVersion && installedVersion === (await releaseJsonPromise).tag_name) {
-      console.log('youtube-dl is already up to date');
+      logger.info('youtube-dl is already up to date');
       return;
     }
-    console.log('Updating youtube-dl...');
+    logger.info('Updating youtube-dl...');
   } else {
-    console.log('Downloading youtube-dl...');
+    logger.info('Downloading youtube-dl...');
   }
 
   const youTubeDlUrl = (await releaseJsonPromise).assets.find(
@@ -29,15 +38,15 @@ export async function downloadYouTubeDl(): Promise<void> {
 
   await downloadFile(youTubeDlUrl, '.');
 
-  console.log('youtube-dl download complete');
+  logger.info('youtube-dl download complete');
 }
 
-async function getInstalledVersion(youTubeDlPath: string): Promise<string | null> {
+async function getInstalledVersion(youTubeDlPath: string, logger: ILogger): Promise<string | null> {
   try {
     const { stdout } = await promisify(execFile)(youTubeDlPath, ['--version']);
     return stdout.trim();
   } catch {
-    console.error('Failed to read installed youtube-dl version');
+    logger.error('Failed to read installed youtube-dl version');
     return null;
   }
 }
