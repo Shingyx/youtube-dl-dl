@@ -11,7 +11,7 @@ export interface ILogger {
 }
 
 export async function downloadYouTubeDl(
-  directory: string = '.',
+  directory: string,
   logger: ILogger = console,
 ): Promise<void> {
   const youTubeDlFilename = process.platform === 'win32' ? 'youtube-dl.exe' : 'youtube-dl';
@@ -36,7 +36,7 @@ export async function downloadYouTubeDl(
     (asset: any) => asset.name === youTubeDlFilename,
   ).browser_download_url;
 
-  await downloadFile(youTubeDlUrl, '.');
+  await downloadFile(youTubeDlUrl, directory);
 
   if (process.platform !== 'win32') {
     await fs.promises.chmod(youTubeDlPath, '755');
