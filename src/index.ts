@@ -14,15 +14,15 @@ export async function downloadYouTubeDl(
   directory: string = '.',
   logger: ILogger = console,
 ): Promise<void> {
-  const youTubeDlFilename = 'youtube-dl.exe';
-  const youTubeDlPath = path.join(directory, 'youtube-dl.exe');
+  const youTubeDlFilename = process.platform === 'win32' ? 'youtube-dl.exe' : 'youtube-dl';
+  const youTubeDlPath = path.join(directory, youTubeDlFilename);
 
   const releaseJsonPromise = downloadJson(
     'https://api.github.com/repos/ytdl-org/youtube-dl/releases/latest',
   );
 
   if (fs.existsSync(youTubeDlPath)) {
-    const installedVersion = getInstalledVersion(youTubeDlPath, logger);
+    const installedVersion = await getInstalledVersion(youTubeDlPath, logger);
     if (installedVersion && installedVersion === (await releaseJsonPromise).tag_name) {
       logger.info('youtube-dl is already up to date');
       return;
@@ -38,12 +38,20 @@ export async function downloadYouTubeDl(
 
   await downloadFile(youTubeDlUrl, '.');
 
+  if (process.platform !== 'win32') {
+    await fs.promises.chmod(youTubeDlPath, '755');
+  }
+
   logger.info('youtube-dl download complete');
 }
 
 async function getInstalledVersion(youTubeDlPath: string, logger: ILogger): Promise<string | null> {
   try {
-    const { stdout } = await promisify(execFile)(youTubeDlPath, ['--version']);
+    let execPath = youTubeDlPath;
+    if (process.platform !== 'win32' && !youTubeDlPath.includes('/')) {
+      execPath = './' + execPath;
+    }
+    const { stdout } = await promisify(execFile)(execPath, ['--version']);
     return stdout.trim();
   } catch {
     logger.error('Failed to read installed youtube-dl version');

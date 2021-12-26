@@ -1,7 +1,6 @@
 import fs from 'fs';
 import fetch, { Response } from 'node-fetch';
 import path from 'path';
-import { promisify } from 'util';
 
 export async function downloadJson(url: string): Promise<any> {
   const response = await wrappedFetch(url);
@@ -12,7 +11,7 @@ export async function downloadFile(url: string, pathPrefix: string): Promise<str
   const response = await wrappedFetch(url);
   const buffer = await response.buffer();
   const filename = path.join(pathPrefix, extractFilename(url));
-  await promisify(fs.writeFile)(filename, buffer);
+  await fs.promises.writeFile(filename, buffer);
   return filename;
 }
 
