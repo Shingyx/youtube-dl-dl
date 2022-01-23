@@ -1,3 +1,3 @@
-# youtube-dl-dl
+# yt-dlp-dl
 
-Downloads the latest version of [youtube-dl](https://github.com/ytdl-org/youtube-dl).
+Downloads the latest version of [yt-dlp](https://github.com/yt-dlp/yt-dlp).

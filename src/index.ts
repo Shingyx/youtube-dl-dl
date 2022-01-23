@@ -10,51 +10,51 @@ export interface ILogger {
   error(message: string): void;
 }
 
-export async function downloadYouTubeDl(
+export async function downloadYtDlp(
   directory: string,
   logger: ILogger = console,
 ): Promise<void> {
-  const youTubeDlFilename = process.platform === 'win32' ? 'youtube-dl.exe' : 'youtube-dl';
-  const youTubeDlPath = path.join(directory, youTubeDlFilename);
+  const ytDlpFilename = process.platform === 'win32' ? 'yt-dlp.exe' : 'yt-dlp';
+  const ytDlpPath = path.join(directory, ytDlpFilename);
 
   const releaseJsonPromise = downloadJson(
-    'https://api.github.com/repos/ytdl-org/youtube-dl/releases/latest',
+    'https://api.github.com/repos/yt-dlp/yt-dlp/releases/latest',
   );
 
-  if (fs.existsSync(youTubeDlPath)) {
-    const installedVersion = await getInstalledVersion(youTubeDlPath, logger);
+  if (fs.existsSync(ytDlpPath)) {
+    const installedVersion = await getInstalledVersion(ytDlpPath, logger);
     if (installedVersion && installedVersion === (await releaseJsonPromise).tag_name) {
-      logger.info('youtube-dl is already up to date');
+      logger.info('yt-dlp is already up to date');
       return;
     }
-    logger.info('Updating youtube-dl...');
+    logger.info('Updating yt-dlp...');
   } else {
-    logger.info('Downloading youtube-dl...');
+    logger.info('Downloading yt-dlp...');
   }
 
-  const youTubeDlUrl = (await releaseJsonPromise).assets.find(
-    (asset: any) => asset.name === youTubeDlFilename,
+  const ytDlpUrl = (await releaseJsonPromise).assets.find(
+    (asset: any) => asset.name === ytDlpFilename,
   ).browser_download_url;
 
-  await downloadFile(youTubeDlUrl, directory);
+  await downloadFile(ytDlpUrl, directory);
 
   if (process.platform !== 'win32') {
-    await fs.promises.chmod(youTubeDlPath, '755');
+    await fs.promises.chmod(ytDlpPath, '755');
   }
 
-  logger.info('youtube-dl download complete');
+  logger.info('yt-dlp download complete');
 }
 
-async function getInstalledVersion(youTubeDlPath: string, logger: ILogger): Promise<string | null> {
+async function getInstalledVersion(ytDlpPath: string, logger: ILogger): Promise<string | null> {
   try {
-    let execPath = youTubeDlPath;
-    if (process.platform !== 'win32' && !youTubeDlPath.includes('/')) {
+    let execPath = ytDlpPath;
+    if (process.platform !== 'win32' && !ytDlpPath.includes('/')) {
       execPath = './' + execPath;
     }
     const { stdout } = await promisify(execFile)(execPath, ['--version']);
     return stdout.trim();
   } catch {
-    logger.error('Failed to read installed youtube-dl version');
+    logger.error('Failed to read installed yt-dlp version');
     return null;
   }
 }

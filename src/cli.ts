@@ -1,11 +1,11 @@
 #!/usr/bin/env node
-import { downloadYouTubeDl } from '.';
+import { downloadYtDlp } from '.';
 
 const [directoryArg] = process.argv.slice(2);
 
 const directory = directoryArg || '.';
 
-downloadYouTubeDl(directory).catch((e) => {
-  console.error('Downloading youtube-dl failed', e);
+downloadYtDlp(directory).catch((e) => {
+  console.error('Downloading yt-dlp failed', e);
   process.exit(1);
 });

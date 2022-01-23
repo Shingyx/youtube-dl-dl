@@ -1,7 +1,7 @@
 {
-  "name": "youtube-dl-dl",
+  "name": "yt-dlp-dl",
   "version": "1.0.0",
-  "description": "Downloads the latest version of youtube-dl",
+  "description": "Downloads the latest version of yt-dlp",
   "license": "MIT",
   "author": "Su-Shing Chen",
   "main": "dist/index.js",
