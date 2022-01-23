@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { downloadYouTubeDl } from '.';
 
 const [directoryArg] = process.argv.slice(2);
