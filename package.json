@@ -16,15 +16,15 @@
     "clean": "rimraf dist",
     "prepare": "yarn build",
     "prepublishOnly": "yarn run-checks",
-    "lint": "yarn eslint --ext .js,.ts src",
+    "lint": "yarn eslint --ext .ts src",
     "fix-lint": "yarn lint --fix",
-    "check-format": "prettier --check \"./**/*.{js,json,md,ts}\" --ignore-path .gitignore",
+    "check-format": "prettier --check \"./**/*.{json,md,ts}\" --ignore-path .gitignore",
     "format": "yarn check-format --write",
     "run-checks": "yarn lint && yarn check-format",
     "fix-checks": "yarn fix-lint && yarn format"
   },
   "dependencies": {
-    "node-fetch": "^2.6.2",
+    "node-fetch": "^2.6.7",
     "tslib": "^2.3.1"
   },
   "devDependencies": {

@@ -10,10 +10,7 @@ export interface ILogger {
   error(message: string): void;
 }
 
-export async function downloadYtDlp(
-  directory: string,
-  logger: ILogger = console,
-): Promise<void> {
+export async function downloadYtDlp(directory: string, logger: ILogger = console): Promise<void> {
   const ytDlpFilename = process.platform === 'win32' ? 'yt-dlp.exe' : 'yt-dlp';
   const ytDlpPath = path.join(directory, ytDlpFilename);
 
