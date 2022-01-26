@@ -1,6 +1,6 @@
 {
   "name": "yt-dlp-dl",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Downloads the latest version of yt-dlp",
   "repository": "https://github.com/Shingyx/yt-dlp-dl",
   "license": "MIT",
