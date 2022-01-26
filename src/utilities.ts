@@ -15,6 +15,12 @@ export async function downloadFile(url: string, pathPrefix: string): Promise<str
   return filename;
 }
 
+export function existsAsync(file: string): Promise<boolean> {
+  return new Promise((resolve) => {
+    fs.access(file, (err) => resolve(!err));
+  });
+}
+
 async function wrappedFetch(url: string): Promise<Response> {
   const response = await fetch(url);
   if (!response.ok) {

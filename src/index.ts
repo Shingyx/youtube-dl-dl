@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { promisify } from 'util';
 
-import { downloadFile, downloadJson } from './utilities';
+import { downloadFile, downloadJson, existsAsync } from './utilities';
 
 export interface ILogger {
   info(message: string): void;
@@ -21,7 +21,7 @@ export async function downloadYtDlp(
     'https://api.github.com/repos/yt-dlp/yt-dlp/releases/latest',
   );
 
-  if (fs.existsSync(ytDlpPath)) {
+  if (await existsAsync(ytDlpPath)) {
     const installedVersion = await getInstalledVersion(ytDlpPath, logger);
     if (installedVersion && installedVersion === (await releaseJsonPromise).tag_name) {
       logger?.info('yt-dlp is already up to date');
