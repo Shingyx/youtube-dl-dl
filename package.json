@@ -15,14 +15,14 @@
     "prebuild": "yarn clean",
     "build": "tsc",
     "clean": "rimraf dist",
+    "fix": "yarn lint:fix && yarn format",
+    "format": "yarn format:check --write",
+    "format:check": "prettier --check \"./**/*.{json,md,ts,yml}\" --ignore-path .gitignore",
+    "lint": "eslint --ext .ts src",
+    "lint:fix": "yarn lint --fix",
     "prepare": "yarn build",
     "prepublishOnly": "yarn run-checks",
-    "lint": "eslint --ext .ts src",
-    "fix-lint": "yarn lint --fix",
-    "check-format": "prettier --check \"./**/*.{json,md,ts}\" --ignore-path .gitignore",
-    "format": "yarn check-format --write",
-    "run-checks": "yarn lint && yarn check-format",
-    "fix-checks": "yarn fix-lint && yarn format"
+    "run-checks": "yarn lint && yarn format:check"
   },
   "dependencies": {
     "node-fetch": "^2.6.7",
