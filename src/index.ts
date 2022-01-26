@@ -10,10 +10,22 @@ export interface ILogger {
   error(message: string): void;
 }
 
+/**
+ * Downloads the latest version of `yt-dlp` to the specified directory.
+ * The downloaded file will be either `yt-dlp` or `yt-dlp.exe` depending on the platform.
+ *
+ * If the file already exists, the download will only occur if the existing version is older than
+ * the latest version.
+ *
+ * @param directory Directory to download to.
+ * @param logger Progress logger, defaults to console. Provide `null` to disable logging.
+ * @returns Promise resolving `true` if the download was attempted and completed,
+ *          or `false` if the latest version is already present.
+ */
 export async function downloadYtDlp(
   directory: string,
   logger: ILogger | null = console,
-): Promise<void> {
+): Promise<boolean> {
   const ytDlpFilename = process.platform === 'win32' ? 'yt-dlp.exe' : 'yt-dlp';
   const ytDlpPath = path.join(directory, ytDlpFilename);
 
@@ -25,7 +37,7 @@ export async function downloadYtDlp(
     const installedVersion = await getInstalledVersion(ytDlpPath, logger);
     if (installedVersion && installedVersion === (await releaseJsonPromise).tag_name) {
       logger?.info('yt-dlp is already up to date');
-      return;
+      return false;
     }
     logger?.info('Updating yt-dlp...');
   } else {
@@ -43,6 +55,7 @@ export async function downloadYtDlp(
   }
 
   logger?.info('yt-dlp download complete');
+  return true;
 }
 
 async function getInstalledVersion(
