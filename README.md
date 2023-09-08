@@ -55,7 +55,7 @@ Returns a promise which resolves with `true` if the download was attempted and c
 
 Progress will be logged to the console by default. Alternatively, provide your own logger which implements the `ILogger` interface, or `null` to disable logging.
 
-[ci-image]: https://img.shields.io/github/workflow/status/Shingyx/yt-dlp-dl/Node.js%20CI/master?style=flat-square
+[ci-image]: https://img.shields.io/github/actions/workflow/status/Shingyx/yt-dlp-dl/node.js.yml?branch=master&style=flat-square
 [ci-url]: https://github.com/Shingyx/yt-dlp-dl/actions?query=branch%3Amaster
 [npm-image]: https://img.shields.io/npm/v/yt-dlp-dl?style=flat-square
 [npm-url]: https://www.npmjs.com/package/yt-dlp-dl
